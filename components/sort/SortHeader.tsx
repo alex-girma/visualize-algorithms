@@ -3,6 +3,7 @@ import { creatRandomArray } from '../lib/functions';
 interface SortHeaderProps {
   algo: string;
   size: number;
+  dataArray: number[];
   setAlgo: React.Dispatch<React.SetStateAction<string>>;
   setSize: React.Dispatch<React.SetStateAction<number>>;
   setDataArray: React.Dispatch<React.SetStateAction<number[]>>;
@@ -13,11 +14,21 @@ const SortHeader = ({
   setAlgo,
   size,
   setSize,
+  dataArray,
   setDataArray,
 }: SortHeaderProps) => {
   const handleRandomData = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setDataArray(creatRandomArray(size));
+  };
+
+  const handleSort = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    const temp = [...dataArray];
+    const newArray = temp.sort((a, b) => {
+      return a - b;
+    });
+    setDataArray(newArray);
   };
 
   return (
@@ -33,7 +44,7 @@ const SortHeader = ({
         <option value="20">Big</option>
       </select>
       <button onClick={handleRandomData}>randomize data</button>
-      <button>Visualize {algo} Sort</button>
+      <button onClick={handleSort}>Visualize {algo} Sort</button>
     </div>
   );
 };
