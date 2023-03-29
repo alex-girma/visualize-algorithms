@@ -24,27 +24,75 @@ const SortHeader = ({
 
   const handleSort = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    const temp = [...dataArray];
-    const newArray = temp.sort((a, b) => {
-      return a - b;
-    });
-    setDataArray(newArray);
+
+    const bubbleSort = async () => {
+      let noSwap;
+      const temp = [...dataArray];
+      for (let i = temp.length; i > 0; i++) {
+        noSwap = true;
+        document.getElementById(`${temp[i]}`)?.classList.add('bg-green-400');
+        for (let j = 0; j < i - 1; j++) {
+          document
+            .getElementById(`${temp[j + 1]}`)
+            ?.classList.add('bg-green-400');
+          setTimeout(() => {
+            if (temp[j] > temp[j + 1]) {
+              let right = temp[j];
+              temp[j] = temp[j + 1];
+              temp[j + 1] = right;
+              setDataArray(temp);
+
+              noSwap = false;
+            }
+          }, 500);
+          // document
+          //   .getElementById(`${temp[i]}`)
+          //   ?.classList.remove('bg-green-400');
+          // document
+          //   .getElementById(`${temp[j + 1]}`)
+          //   ?.classList.remove('bg-green-400');
+        }
+        if (noSwap) break;
+      }
+      //return temp;
+    };
+    bubbleSort();
+    // setDataArray(bubbleSort);
   };
 
   return (
-    <div className="flex gap-10">
-      <select value={algo} onChange={(e) => setAlgo(e.target.value)}>
-        <option value="Bubble">Bubble Sort</option>
-        <option value="Selection">Selection Sort</option>
-        <option value="Insertion">Insertion Sort</option>
-      </select>
-      <select value={size} onChange={(e) => setSize(Number(e.target.value))}>
-        <option value="10">Small</option>
-        <option value="15">Medium</option>
-        <option value="20">Big</option>
-      </select>
-      <button onClick={handleRandomData}>randomize data</button>
-      <button onClick={handleSort}>Visualize {algo} Sort</button>
+    <div className="flex gap-10 text-gray-900">
+      <div>
+        <span className="font-medium text-blue-600 underline">
+          Select Algorithm:
+        </span>
+        <select value={algo} onChange={(e) => setAlgo(e.target.value)}>
+          <option value="Bubble">Bubble Sort</option>
+          <option value="Selection">Selection Sort</option>
+          <option value="Insertion">Insertion Sort</option>
+        </select>
+      </div>
+      <div>
+        <span className="font-medium text-blue-600 underline">
+          Select array size:
+        </span>
+        <select value={size} onChange={(e) => setSize(Number(e.target.value))}>
+          <option value="10">Small</option>
+          <option value="15">Big</option>
+        </select>
+      </div>
+      <button
+        onClick={handleRandomData}
+        className="rounded  bg-blue-400 px-4 py-1 duration-150 hover:bg-blue-500"
+      >
+        random array
+      </button>
+      <button
+        onClick={handleSort}
+        className="rounded  bg-blue-400 px-4 py-1 duration-150 hover:bg-blue-500"
+      >
+        Visualize {algo} Sort
+      </button>
     </div>
   );
 };
