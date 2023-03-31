@@ -26,6 +26,7 @@ const SortHeader = ({
     e.preventDefault();
 
     const bubbleSort = async () => {
+      const swap = () => {};
       let noSwap;
       for (let i = dataArray.length; i > 0; i++) {
         const temp = [...dataArray];
