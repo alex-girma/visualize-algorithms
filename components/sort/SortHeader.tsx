@@ -28,32 +28,34 @@ const SortHeader = ({
     const bubbleSort = async () => {
       const swap = () => {};
       let noSwap;
+      const temp = [...dataArray];
       for (let i = dataArray.length; i > 0; i++) {
-        const temp = [...dataArray];
         noSwap = true;
-        document.getElementById(`${temp[i]}`)?.classList.add('bg-green-400');
-        for (let j = 0; j < i - 1; j++) {
-          document
-            .getElementById(`${temp[j + 1]}`)
-            ?.classList.add('bg-green-400');
+        setTimeout(() => {
+          document.getElementById(`${temp[i]}`)?.classList.add('bg-green-400');
+          for (let j = 0; j < i - 1; j++) {
+            document
+              .getElementById(`${temp[j + 1]}`)
+              ?.classList.add('bg-green-400');
 
-          if (temp[j] > temp[j + 1]) {
-            let right = temp[j];
-            temp[j] = temp[j + 1];
-            temp[j + 1] = right;
-            setTimeout(() => {
-              setDataArray(temp);
-            }, (i + 1) * 100);
+            if (temp[j] > temp[j + 1]) {
+              let right = temp[j];
+              temp[j] = temp[j + 1];
+              temp[j + 1] = right;
+              setTimeout(() => {
+                setDataArray(temp);
+              }, (j + 1) * 200);
 
-            noSwap = false;
+              noSwap = false;
+            }
+            // document
+            //   .getElementById(`${temp[i]}`)
+            //   ?.classList.remove('bg-green-400');
+            // document
+            //   .getElementById(`${temp[j + 1]}`)
+            //   ?.classList.remove('bg-green-400');
           }
-          // document
-          //   .getElementById(`${temp[i]}`)
-          //   ?.classList.remove('bg-green-400');
-          // document
-          //   .getElementById(`${temp[j + 1]}`)
-          //   ?.classList.remove('bg-green-400');
-        }
+        }, i * 2100);
         if (noSwap) break;
       }
       //return temp;
