@@ -22,46 +22,34 @@ const SortHeader = ({
     setDataArray(creatRandomArray(size));
   };
 
-  const handleSort = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-
-    const bubbleSort = async () => {
-      const swap = () => {};
-      let noSwap;
-      const temp = [...dataArray];
-      for (let i = dataArray.length; i > 0; i++) {
-        noSwap = true;
-        setTimeout(() => {
-          document.getElementById(`${temp[i]}`)?.classList.add('bg-green-400');
-          for (let j = 0; j < i - 1; j++) {
-            document
-              .getElementById(`${temp[j + 1]}`)
-              ?.classList.add('bg-green-400');
-
-            if (temp[j] > temp[j + 1]) {
-              let right = temp[j];
-              temp[j] = temp[j + 1];
-              temp[j + 1] = right;
-              setTimeout(() => {
-                setDataArray(temp);
-              }, (j + 1) * 200);
-
-              noSwap = false;
-            }
-            // document
-            //   .getElementById(`${temp[i]}`)
-            //   ?.classList.remove('bg-green-400');
-            // document
-            //   .getElementById(`${temp[j + 1]}`)
-            //   ?.classList.remove('bg-green-400');
-          }
-        }, i * 2100);
-        if (noSwap) break;
+  const bubbleSort = async () => {
+    let noSwap;
+    for (let i = dataArray.length; i > 0; i++) {
+      noSwap = true;
+      for (let j = 0; j < i - 1; j++) {
+        document
+          .getElementById(`${dataArray[j]}`)
+          ?.classList.add('bg-green-400');
+        document
+          .getElementById(`${dataArray[j + 1]}`)
+          ?.classList.add('bg-green-400');
+        if (dataArray[j] > dataArray[j + 1]) {
+          let right = dataArray[j];
+          dataArray[j] = dataArray[j + 1];
+          dataArray[j + 1] = right;
+          setDataArray([...dataArray]);
+          await new Promise((resolve) => setTimeout(resolve, 2000));
+          noSwap = false;
+        }
+        document
+          .getElementById(`${dataArray[j]}`)
+          ?.classList.remove('bg-green-400');
+        document
+          .getElementById(`${dataArray[j + 1]}`)
+          ?.classList.remove('bg-green-400');
       }
-      //return temp;
-    };
-    bubbleSort();
-    // setDataArray(bubbleSort);
+      if (noSwap) break;
+    }
   };
 
   return (
@@ -92,7 +80,7 @@ const SortHeader = ({
         random array
       </button>
       <button
-        onClick={handleSort}
+        onClick={bubbleSort}
         className="rounded  bg-blue-400 px-4 py-1 duration-150 hover:bg-blue-500"
       >
         Visualize {algo} Sort
