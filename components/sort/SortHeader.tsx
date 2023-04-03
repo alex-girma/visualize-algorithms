@@ -1,4 +1,10 @@
-import { creatRandomArray } from '../lib/functions';
+import { useEffect } from 'react';
+import {
+  addClass,
+  creatRandomArray,
+  removeClass,
+  toggleClass,
+} from '../lib/functions';
 
 interface SortHeaderProps {
   algo: string;
@@ -22,33 +28,89 @@ const SortHeader = ({
     setDataArray(creatRandomArray(size));
   };
 
+  const handleSort = () => {
+    switch (algo) {
+      case 'Bubble':
+        bubbleSort();
+        break;
+      case 'Selection':
+        selectionSort();
+        break;
+      case 'Insertion':
+        insertionSort();
+        break;
+      default:
+        break;
+    }
+  };
+
   const bubbleSort = async () => {
     let noSwap;
-    for (let i = dataArray.length; i > 0; i++) {
+    for (let i = dataArray.length; i > 0; i--) {
       noSwap = true;
       for (let j = 0; j < i - 1; j++) {
-        document
-          .getElementById(`${dataArray[j]}`)
-          ?.classList.add('bg-green-400');
-        document
-          .getElementById(`${dataArray[j + 1]}`)
-          ?.classList.add('bg-green-400');
+        toggleClass(dataArray[j], 'bg-green-400');
+        toggleClass(dataArray[j + 1], 'bg-green-400');
         if (dataArray[j] > dataArray[j + 1]) {
           let right = dataArray[j];
           dataArray[j] = dataArray[j + 1];
           dataArray[j + 1] = right;
           setDataArray([...dataArray]);
-          await new Promise((resolve) => setTimeout(resolve, 2000));
+          await new Promise((resolve) => setTimeout(resolve, 500));
           noSwap = false;
+        } else {
+          await new Promise((resolve) => setTimeout(resolve, 500));
         }
-        document
-          .getElementById(`${dataArray[j]}`)
-          ?.classList.remove('bg-green-400');
-        document
-          .getElementById(`${dataArray[j + 1]}`)
-          ?.classList.remove('bg-green-400');
+        toggleClass(dataArray[j], 'bg-green-400');
+        toggleClass(dataArray[j + 1], 'bg-green-400');
       }
+
       if (noSwap) break;
+    }
+  };
+
+  const selectionSort = async () => {
+    for (var i = 0; i < dataArray.length; i++) {
+      let smallest = i;
+      addClass(dataArray[smallest], 'bg-red-400');
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      for (let j = i + 1; j < dataArray.length; j++) {
+        addClass(dataArray[j], 'bg-green-400');
+        await new Promise((resolve) => setTimeout(resolve, 500));
+        if (dataArray[j] < dataArray[smallest]) {
+          removeClass(dataArray[smallest], 'bg-red-400');
+          smallest = j;
+          addClass(dataArray[j], 'bg-red-400');
+          await new Promise((resolve) => setTimeout(resolve, 500));
+        }
+        removeClass(dataArray[j], 'bg-green-400');
+      }
+      if (i !== smallest) {
+        let temp = dataArray[i];
+        dataArray[i] = dataArray[smallest];
+        dataArray[smallest] = temp;
+        setDataArray([...dataArray]);
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+      }
+      removeClass(dataArray[i], 'bg-red-400');
+      addClass(dataArray[i], 'bg-yellow-400');
+    }
+  };
+
+  const insertionSort = async () => {
+    for (let i = 1; i < dataArray.length; i++) {
+      let currentValue = dataArray[i];
+      let j = i - 1;
+
+      while (j >= 0 && dataArray[j] > currentValue) {
+        dataArray[j + 1] = dataArray[j];
+        setDataArray([...dataArray]);
+        j--;
+      }
+
+      dataArray[j + 1] = currentValue;
+      setDataArray([...dataArray]);
+      await new Promise((resolve) => setTimeout(resolve, 500));
     }
   };
 
@@ -80,7 +142,7 @@ const SortHeader = ({
         random array
       </button>
       <button
-        onClick={bubbleSort}
+        onClick={handleSort}
         className="rounded  bg-blue-400 px-4 py-1 duration-150 hover:bg-blue-500"
       >
         Visualize {algo} Sort

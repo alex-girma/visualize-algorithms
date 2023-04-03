@@ -8,3 +8,13 @@ export const creatRandomArray = (size: number) => {
   }
   return array;
 };
+
+export const toggleClass = (id: number, className: string) => {
+  document.getElementById(String(id))?.classList.toggle(className);
+};
+export const addClass = (id: number, className: string) => {
+  document.getElementById(String(id))?.classList.add(className);
+};
+export const removeClass = (id: number, className: string) => {
+  document.getElementById(String(id))?.classList.remove(className);
+};
