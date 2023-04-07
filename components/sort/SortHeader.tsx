@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useState } from 'react';
 import {
   addClass,
   creatRandomArray,
@@ -23,12 +23,16 @@ const SortHeader = ({
   dataArray,
   setDataArray,
 }: SortHeaderProps) => {
+  const [isSorting, setIsSorting] = useState(false);
+
   const handleRandomData = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (isSorting) return;
     e.preventDefault();
     setDataArray(creatRandomArray(size));
   };
 
   const handleSort = () => {
+    if (isSorting) return;
     switch (algo) {
       case 'Bubble':
         bubbleSort();
@@ -45,12 +49,14 @@ const SortHeader = ({
   };
 
   const bubbleSort = async () => {
+    setIsSorting(true);
     let noSwap;
     for (let i = dataArray.length; i > 0; i--) {
       noSwap = true;
       for (let j = 0; j < i - 1; j++) {
         toggleClass(dataArray[j], 'bg-green-400');
         toggleClass(dataArray[j + 1], 'bg-green-400');
+        await new Promise((resolve) => setTimeout(resolve, 500));
         if (dataArray[j] > dataArray[j + 1]) {
           let right = dataArray[j];
           dataArray[j] = dataArray[j + 1];
@@ -58,18 +64,22 @@ const SortHeader = ({
           setDataArray([...dataArray]);
           await new Promise((resolve) => setTimeout(resolve, 500));
           noSwap = false;
-        } else {
-          await new Promise((resolve) => setTimeout(resolve, 500));
         }
         toggleClass(dataArray[j], 'bg-green-400');
         toggleClass(dataArray[j + 1], 'bg-green-400');
       }
-
+      addClass(dataArray[i - 1], 'bg-yellow-400');
       if (noSwap) break;
     }
+    for (let i = 0; i < dataArray.length; i++) {
+      addClass(dataArray[i - 1], 'bg-yellow-400');
+    }
+    setIsSorting(false);
   };
 
   const selectionSort = async () => {
+    setIsSorting(true);
+
     for (var i = 0; i < dataArray.length; i++) {
       let smallest = i;
       addClass(dataArray[smallest], 'bg-red-400');
@@ -90,27 +100,37 @@ const SortHeader = ({
         dataArray[i] = dataArray[smallest];
         dataArray[smallest] = temp;
         setDataArray([...dataArray]);
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        await new Promise((resolve) => setTimeout(resolve, 500));
       }
       removeClass(dataArray[i], 'bg-red-400');
       addClass(dataArray[i], 'bg-yellow-400');
     }
+    setIsSorting(false);
   };
 
   const insertionSort = async () => {
     for (let i = 1; i < dataArray.length; i++) {
       let currentValue = dataArray[i];
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      addClass(currentValue, 'bg-red-400');
+      addClass(currentValue, 'translateY');
       let j = i - 1;
 
-      while (j >= 0 && dataArray[j] > currentValue) {
-        dataArray[j + 1] = dataArray[j];
-        setDataArray([...dataArray]);
-        j--;
-      }
+      for (j; j >= 0 && dataArray[j] > currentValue; j--) {
+        await new Promise((resolve) => setTimeout(resolve, 500));
 
-      dataArray[j + 1] = currentValue;
-      setDataArray([...dataArray]);
+        dataArray[j + 1] = dataArray[j];
+        dataArray[j] = currentValue;
+
+        setDataArray([...dataArray]);
+        await new Promise((resolve) => setTimeout(resolve, 500));
+      }
+      removeClass(currentValue, 'bg-red-400');
       await new Promise((resolve) => setTimeout(resolve, 500));
+      addClass(currentValue, 'bg-yellow-400');
+      addClass(dataArray[j], 'bg-yellow-400');
+      addClass(dataArray[i], 'bg-yellow-400');
+      removeClass(currentValue, 'translateY');
     }
   };
 

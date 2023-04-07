@@ -8,3 +8,7 @@
 .rotatex0 {
   transform: rotateX(-180deg);
 }
+
+.translateY {
+  margin-top: -230px;
+}
