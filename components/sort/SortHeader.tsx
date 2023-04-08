@@ -128,8 +128,8 @@ const SortHeader = ({
       removeClass(currentValue, 'bg-red-400');
       await new Promise((resolve) => setTimeout(resolve, 500));
       addClass(currentValue, 'bg-yellow-400');
-      // addClass(dataArray[j], 'bg-yellow-400');
-      // addClass(dataArray[i], 'bg-yellow-400');
+      addClass(dataArray[j], 'bg-yellow-400');
+      addClass(dataArray[i], 'bg-yellow-400');
       removeClass(currentValue, 'translateY');
     }
   };
