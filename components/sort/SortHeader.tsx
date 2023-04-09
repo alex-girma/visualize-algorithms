@@ -29,6 +29,9 @@ const SortHeader = ({
     if (isSorting) return;
     e.preventDefault();
     setDataArray(creatRandomArray(size));
+    for (let i = 0; i < dataArray.length; i++) {
+      removeClass(dataArray[i], 'bg-yellow-400');
+    }
   };
 
   const handleSort = () => {
